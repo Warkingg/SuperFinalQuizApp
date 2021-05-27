@@ -14,6 +14,8 @@ public class Topic implements Serializable {
 
     private String topic_title;
 
+    private String topic_desc;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Audit audit;
 

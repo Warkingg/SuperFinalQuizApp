@@ -186,7 +186,7 @@ public class QuizController {
         imageRepository.save(img);
         return ResponseEntity.status(HttpStatus.OK);
     }
-    @RequestMapping(value = "/addActivity", method = RequestMethod.POST)
+    @PostMapping("/addActivity")
     public List<Activity> addActivity(@RequestBody Activity activity) {
 
         Audit addAudit =new Audit();
@@ -199,13 +199,13 @@ public class QuizController {
         return quizMakerService.save(activity);
     }
 
-    @RequestMapping(value = "/activities", method = RequestMethod.GET)
+    @GetMapping("/activities")
     public List<Activity> getActivities() {
 
         return quizMakerService.findAll();
     }
 
-    @RequestMapping(value = "/updateActivity", method = RequestMethod.POST)
+    @PostMapping("/updateActivity")
     public List<Activity> updateAcitivity(@RequestBody Activity editActivity) {
 
         Date date = new Date();
@@ -218,13 +218,13 @@ public class QuizController {
         return quizMakerService.save(editActivity);
     }
 
-    @RequestMapping(value = "/deleteActivity/{id}", method = RequestMethod.GET)
+    @GetMapping("/deleteActivity/{id}")
     public ResponseEntity removeActivity( @PathVariable("id") Long id) {
         quizMakerService.removeActivityById(id);
         return new ResponseEntity("Delete Success!", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/addTopic", method = RequestMethod.POST)
+    @PostMapping("/addTopic")
     public List<Topic> addTopic(@RequestBody Topic topic) {
         Audit addAudit =new Audit();
         Date date = new Date();
@@ -237,13 +237,13 @@ public class QuizController {
         return quizMakerService.saveTopic(topic);
     }
 
-    @RequestMapping(value = "/categories", method = RequestMethod.GET)
+    @GetMapping("/topics")
     public List<Topic> getTopics() {
 
         return quizMakerService.findAllTopic().stream().filter(x-> x.getTopic_title()!="").collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/updateTopic", method = RequestMethod.POST)
+    @PostMapping("/updateTopic")
     public List<Topic> updateTopic(@RequestBody Topic updateTopic) {
 
         Date date = new Date();

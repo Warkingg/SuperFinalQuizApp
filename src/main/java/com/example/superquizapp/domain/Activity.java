@@ -14,6 +14,8 @@ public class Activity implements Serializable {
 
     private String activity_title;
 
+    private String activity_desc;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Audit audit;
 }

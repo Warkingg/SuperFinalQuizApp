@@ -6,7 +6,7 @@ import lombok.Data;
 public class QuizDetails {
     private String quizTitle;
 
-    private String quizTopic;
+    private String quizCategory;
 
     private int quizIndex;
 
@@ -17,4 +17,8 @@ public class QuizDetails {
     private String level;
 
     private String date;
+
+    private int surveyIndex;
+
+    private boolean surveyParticipated;
 }

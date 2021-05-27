@@ -25,11 +25,15 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     private String phone;
-    private String classroom;
+    private String city;
+    private String country;
+    private String state;
 
     private boolean showStatus;
     private int score;
     private int result;
+    private String grade;
+    private Quiz reviewingQuiz;
     private String notification;
     private boolean enabled=true;
 

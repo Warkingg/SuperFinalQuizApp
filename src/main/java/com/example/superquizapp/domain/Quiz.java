@@ -47,15 +47,25 @@ public class Quiz implements Serializable {
 
     private String assigneeClassList;
 
+    private String assigneeCityList;
+
+    private String assigneeStateList;
+
     private String introduction_message;
 
     private String conclusion_message;
+
+    private int surveyIndex;
+
+    private Long  reviewer_id;
+
+    private Long  invigilator_id;
 
     /** Time in Min**/
     private int quiz_time;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    private Topic topic;
+    private Category category;
 
     @OneToMany(mappedBy = "quiz",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -75,11 +85,31 @@ public class Quiz implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Audit audit;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Grade grade;
+
     public Long getCreatorId() {
         return creator;
     }
 
     public void setCreatorId(Long creatorId) {
         this.creator = creatorId;
+    }
+
+
+    public Long getInvigilator() {
+        return invigilator_id;
+    }
+
+    public void setInvigilator(Long invigilator_id) {
+        this.invigilator_id = invigilator_id;
+    }
+
+    public Long getReviewer() {
+        return reviewer_id;
+    }
+
+    public void setReviewer(Long reviewer_id) {
+        this.reviewer_id = reviewer_id;
     }
 }

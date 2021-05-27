@@ -2,7 +2,7 @@ package com.example.superquizapp.service;
 
 import com.example.superquizapp.domain.*;
 import com.example.superquizapp.model.ActivityLog;
-import com.example.superquizapp.model.QuestionBankTopicMap;
+import com.example.superquizapp.model.QBankCategoryMap;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.Set;
 
 public interface QuizMakerService {
 
-    List<Topic> saveTopic(Topic topic);
+    List<Category> saveCategory(Category category);
 
-    void removeTopicById(Long id) throws ConstraintViolationException;
+    void removeCategoryById(Long id) throws ConstraintViolationException;
 
-    List<Topic> findAllTopic();
+    List<Category> findAllCategory();
 
     Quiz saveQuiz(Quiz quiz);
 
@@ -26,11 +26,11 @@ public interface QuizMakerService {
     Optional <Quiz> findQuizById(Long id);
 
     void removeQuizById(int id);
-    Optional <Quiz> getQuizTopicById(Long id);
+    Optional <Quiz> getQuizCategoryById(Long id);
 
-    Topic findTopicByTitle(String title);
+    Category findCategoryByTitle(String title);
 
-    Topic findTopicById(Long id);
+    Category findCategoryById(Long id);
 
     Set<Question> fetchQuestionSet(Long quizId);
 
@@ -38,12 +38,12 @@ public interface QuizMakerService {
 
     void updateQuestionForBlob(Long id, String s, String s1);
 
-    List<QuizUser>  getQuizUserList(Long topicId);
+    List<QuizUser>  getQuizUserList(Long categoryId);
 
     List<QuizUser> findAllQuizResult();
 
 
-    List<Object[]> getQuizUserByTopic(Long topicId);
+    List<Object[]> getQuizUserByCategory(Long categoryId);
 
     List<QuizUser> getQuizResultByQuizId(int quizId);
 
@@ -70,9 +70,43 @@ public interface QuizMakerService {
 
     List<Activity> findAll();
 
-    List<QuestionBankTopicMap> getQuestionBankCount();
+    List<QBankCategoryMap> getQuestionBankCount();
 
     ActivityLog getActivityByUserId(Long userId);
 
     List<User> fetchAssigneeList(Long id);
+
+    boolean checkSurveyExists(Long quizId,int surveyIndex);
+
+
+    List<Object[]> stateWisePassResult();
+
+    List<Object[]> stateWiseFailResult();
+
+    List<Object[]> cityWisePassResult(String state);
+
+    List<Object[]> cityWiseFailResult(String state);
+
+    List<Object[]> getStateWisePassCountByCategory(Long categoryId);
+
+    List<Object[]> getStateWiseFailCountByCategory(Long categoryId);
+
+    List<Object[]> getPassByQuizIdCityWise(int quizId, String state);
+
+    List<Object[]> getFailByQuizIdCityWise(int quizId, String state);
+
+    List<String> getQuizPerUserRole(List<String> states, List<String>  roleids);
+
+
+    SurveyUser getSurveyPartcipate(Long userId, int surveyIndex);
+
+    SurveyUser saveSurveyUser(SurveyUser surveyUser);
+
+    List<SurveyUser> findAllSurveyUser();
+
+    void removeSurveyById(int id);
+
+    Optional<User> getReviewer(Long quizId);
+
+
 }

@@ -27,16 +27,16 @@ public class Question implements Serializable {
     private Long questionSeq;
 
     @JsonIgnore
-    private AnswerType answerType;
+    private ResponseType responseType;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private AnswerType getAnswerType(){return answerType;}
+    private ResponseType getResponseType(){return responseType;}
 
-    public void setAnswerType(AnswerType answerType){this.answerType = answerType;}
+    public void setResponseType(ResponseType responseType){this.responseType = responseType;}
 
     @OneToMany(mappedBy = "question" ,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JsonManagedReference
-    private Set<Answer> answerList;
+    private Set<Response> responseList;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
@@ -48,4 +48,14 @@ public class Question implements Serializable {
     @JoinColumn(name = "quiz_user_id")
     private QuizUser quizUser;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private FeedBack feedBack;
+
+    public String getQuestion_title() {
+        return question;
+    }
+
+    public void setQuestion_title(String question_title) {
+        this.question = question_title;
+    }
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class Answer implements Serializable {
+public class Response implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -21,10 +21,18 @@ public class Answer implements Serializable {
 
     private boolean correctAnswerFlag;
 
+    private boolean surveyTextOption;
+
+    private boolean surveyRatingOption;
+
+    private int rating;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "question_id")
     private Question question;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Audit audit;
 
 }

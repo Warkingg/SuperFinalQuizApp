@@ -1,12 +1,12 @@
 package com.example.superquizapp.model;
 
-import com.example.superquizapp.domain.Topic;
+import com.example.superquizapp.domain.Category;
 import lombok.Data;
 
 @Data
-public class QuestionBankTopicMap {
+public class QBankCategoryMap {
 
-        private Topic topic;
+        private Category category;
 
         private Long questionBankcount;
 

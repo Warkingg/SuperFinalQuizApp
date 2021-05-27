@@ -2,7 +2,7 @@ package com.example.superquizapp.service.impl;
 
 import com.example.superquizapp.domain.*;
 import com.example.superquizapp.model.ActivityLog;
-import com.example.superquizapp.model.QuestionBankTopicMap;
+import com.example.superquizapp.model.QBankCategoryMap;
 import com.example.superquizapp.repository.*;
 import com.example.superquizapp.service.QuizMakerService;
 import org.hibernate.exception.ConstraintViolationException;
@@ -32,10 +32,13 @@ public class QuizMakerServiceImpl implements QuizMakerService {
     private AuditRepository auditRepository;
 
     @Autowired
-    private TopicRepository topicRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private QuizRepository quizRepository;
+
+    @Autowired
+    private SurveyUserRepository surveyUserRepository;
 
     @Autowired
     private QuizUserRepository quizUserRepository;
@@ -43,33 +46,35 @@ public class QuizMakerServiceImpl implements QuizMakerService {
     @Autowired
     private UserQuestionMapRepository userQuestionMapRepository;
 
+
     @Autowired
     private UserRepository userRepository;
+
 
     /** The application logger */
     private static final Logger LOG = LoggerFactory.getLogger(QuizMakerServiceImpl.class);
 
     @Override
-    public List<Topic> saveTopic(Topic topic) {
-        topicRepository.save(topic);
+    public List<Category> saveCategory(Category category) {
+        categoryRepository.save(category);
 
-        List<Topic> topicList= (List<Topic>) topicRepository.findAll();
+        List<Category> categoryList= (List<Category>) categoryRepository.findAll();
 
 
-        return topicList;
+        return categoryList;
     }
 
     @Override
-    public void removeTopicById(Long id) throws ConstraintViolationException {
-        topicRepository.deleteById(id);
+    public void removeCategoryById(Long id) throws ConstraintViolationException {
+        categoryRepository.deleteById(id);
     }
 
     @Override
-    public List<Topic> findAllTopic() {
-        List<Topic> topicList= (List<Topic>) topicRepository.findAll();
-        topicList = topicList.stream().filter(x-> x.getTopic_title()!="").collect(Collectors.toList());
+    public List<Category> findAllCategory() {
+        List<Category> categoryList= (List<Category>) categoryRepository.findAll();
+        categoryList = categoryList.stream().filter(x-> x.getCateogry_title()!="").collect(Collectors.toList());
 
-        return topicList;
+        return categoryList;
     }
 
     @Override
@@ -95,40 +100,38 @@ public class QuizMakerServiceImpl implements QuizMakerService {
 
     @Override
     public void removeQuizById(int id) {
-        Long quizId = quizRepository.getQuizIdByIndex(id);
-        quizRepository.deleteById(quizId);
     }
 
     @Override
-    public Optional<Quiz> getQuizTopicById(Long id) {
+    public Optional<Quiz> getQuizCategoryById(Long id) {
         return quizRepository.findById(id);
     }
 
     @Override
-    public Topic findTopicByTitle(String title) {
-        List<Topic> topicList = ( List<Topic>)topicRepository.findAll();
-        Topic topics = new Topic();
-        for(Topic topic:topicList){
-            if(topic.getTopic_title().equals(title)){
-                topics = topic;
+    public Category findCategoryByTitle(String title) {
+        List<Category> categoryList = ( List<Category>)categoryRepository.findAll();
+        Category categories = new Category();
+        for(Category category:categoryList){
+            if(category.getCateogry_title().equals(title)){
+                categories = category;
             }
 
         }
 
-        return topics;
+        return categories;
     }
 
     @Override
-    public Topic findTopicById(Long id) {
-        List<Topic> topicList = ( List<Topic>)topicRepository.findAll();
-        Topic topics = new Topic();
-        for(Topic topic:topicList){
-            if(topic.getTopic_id().equals(id)){
-                topics = topic;
+    public Category findCategoryById(Long id) {
+        List<Category> categoryList = ( List<Category>) categoryRepository.findAll();
+        Category categories = new Category();
+        for(Category category:categoryList){
+            if(category.getCategory_id().equals(id)){
+                categories = category;
                 break;
             }
         }
-        return topics;
+        return categories;
     }
 
     @Override
@@ -150,13 +153,11 @@ public class QuizMakerServiceImpl implements QuizMakerService {
 
     @Override
     public void updateQuestionForBlob(Long id, String s, String s1) {
-        Long questionId = Long.parseLong(s.split("_")[0]);
-        quizRepository.updateBlobUrl(id,questionId,s1);
     }
 
     @Override
-    public List<QuizUser> getQuizUserList(Long topicId) {
-        return quizUserRepository.getQuizUserList(topicId);
+    public List<QuizUser> getQuizUserList(Long categoryId) {
+        return quizUserRepository.getQuizUserList(categoryId);
     }
 
     @Override
@@ -165,8 +166,8 @@ public class QuizMakerServiceImpl implements QuizMakerService {
     }
 
     @Override
-    public List<Object[]> getQuizUserByTopic(Long topicId) {
-        return quizUserRepository.getQuizByTopic(topicId);
+    public List<Object[]> getQuizUserByCategory(Long categoryId) {
+        return quizUserRepository.getQuizByCategory(categoryId);
     }
 
     @Override
@@ -205,6 +206,89 @@ public class QuizMakerServiceImpl implements QuizMakerService {
     }
 
     @Override
+    public boolean checkSurveyExists(Long quizId, int surveyIndex) {
+        boolean flag = false;
+        Optional<Quiz> optionalSurvey = quizRepository.findById(quizId);
+        if(optionalSurvey.get().getSurveyIndex()!=0 && optionalSurvey.get().getSurveyIndex()==surveyIndex){
+            flag =  true;
+        }
+        return flag;
+    }
+
+    @Override
+    public List<Object[]> stateWisePassResult() {
+        return quizUserRepository.getStateWisePassCount();
+    }
+
+    @Override
+    public List<Object[]> stateWiseFailResult() {
+        return quizUserRepository.getStateWiseFailCount();
+    }
+
+    @Override
+    public List<Object[]> cityWisePassResult(String state) {
+        return quizUserRepository.getCityWisePassCount(state);
+    }
+
+    @Override
+    public List<Object[]> cityWiseFailResult(String state) {
+        return quizUserRepository.getCityWiseFailCount(state);
+    }
+
+    @Override
+    public List<Object[]> getStateWisePassCountByCategory(Long categoryId) {
+        return quizUserRepository.getStateWisePassCountByCategory(categoryId);
+    }
+
+    @Override
+    public List<Object[]> getStateWiseFailCountByCategory(Long categoryId) {
+        return quizUserRepository.getStateWiseFailCountByCategory(categoryId);
+    }
+
+    @Override
+    public List<Object[]> getPassByQuizIdCityWise(int quizId, String state) {
+        return quizUserRepository.getPassByQuizIdCityWise(quizId,state);
+    }
+
+    @Override
+    public List<Object[]> getFailByQuizIdCityWise(int quizId, String state) {
+        return quizUserRepository.getFailByQuizIdCityWise(quizId,state);
+    }
+
+    @Override
+    public List<String> getQuizPerUserRole(List<String> states, List<String> roleids) {
+        return quizUserRepository.getQuizPerUserRole(states,roleids);
+    }
+
+    @Override
+    public SurveyUser getSurveyPartcipate(Long userId, int surveyIndex) {
+        return surveyUserRepository.getSurveyParticipate(userId,surveyIndex);
+    }
+
+    @Override
+    public SurveyUser saveSurveyUser(SurveyUser surveyUser) {
+        return surveyUserRepository.save(surveyUser);
+    }
+
+    @Override
+    public List<SurveyUser> findAllSurveyUser() {
+        return (List<SurveyUser>)surveyUserRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void removeSurveyById(int id) {
+        Long quizId=  quizRepository.getSurveyIdByIndex(id);
+        quizRepository.deleteById(quizId);
+    }
+
+    @Override
+    public Optional<User> getReviewer(Long quizId) {
+        String reviewer = quizRepository.fetchReviewer(quizId);
+        return userRepository.findById(Long.valueOf(reviewer));
+    }
+
+    @Override
     public Optional<Audit> getAuditById(Long id) {
         return auditRepository.findById(id);
     }
@@ -236,15 +320,15 @@ public class QuizMakerServiceImpl implements QuizMakerService {
     }
 
     @Override
-    public List<QuestionBankTopicMap> getQuestionBankCount() {
-        List<Topic> topicIdList = quizRepository.getDistinctTopics();
-        QuestionBankTopicMap questionBankTopicMap =null;
-        List<QuestionBankTopicMap> questionBankCountList = new ArrayList<QuestionBankTopicMap>();
-        for(Topic topic : topicIdList){
-            questionBankTopicMap =  new QuestionBankTopicMap();
-            questionBankTopicMap.setTopic(topic);
-            questionBankTopicMap.setQuestionBankcount(quizRepository.getBankPerTopic(topic.getTopic_id()));
-            questionBankCountList.add(questionBankTopicMap);
+    public List<QBankCategoryMap> getQuestionBankCount() {
+        List<Category> categoryIdList = quizRepository.getDistinctCategories();
+        QBankCategoryMap qBankCategoryMap =null;
+        List<QBankCategoryMap> questionBankCountList = new ArrayList<QBankCategoryMap>();
+        for(Category category : categoryIdList){
+            qBankCategoryMap =  new QBankCategoryMap();
+            qBankCategoryMap.setCategory(category);
+            qBankCategoryMap.setQuestionBankcount(quizRepository.getBankPerCategory(category.getCategory_id()));
+            questionBankCountList.add(qBankCategoryMap);
         }
         return questionBankCountList;
     }

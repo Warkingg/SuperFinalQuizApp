@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
 
-
     @Autowired
     UserRoleRepository userRoleRepository;
 

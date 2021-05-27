@@ -3,7 +3,7 @@ package com.example.superquizapp.utility;
 public interface QuizQueryConstant {
     public static final String FETCH_QUIZ_RESULT_BY_USER = " FROM QuizUser qu where qu.userId=:userId";
 
-    public static final String FETCH_QUIZ_USER ="FROM QuizUser where  quiz_topic_id=:topic_id";
+    public static final String FETCH_QUIZ_USER ="FROM QuizUser where  quiz_category_id=:category_id";
 
     public static final String FETCH_QUIZUSER_BY_QUIZID ="FROM QuizUser where  quiz_id=:quizId";
 
@@ -11,9 +11,9 @@ public interface QuizQueryConstant {
 
     public static final String PASS_COUNT_STATEWISE = "select count(*) as fail_count,usr.state from  quiz_user qu  inner join User usr on usr.id=qu.user_id where qu.result='PASS'   group by usr.state";
 
-    public static final String PASS_COUNT_STATEWISE_TOPIC = "select count(*) as pass_count,usr.state from  quiz_user qu inner join User usr on usr.id=qu.user_id where qu.result='PASS' and qu.quiz_topic_id=:topicId  group by usr.state";
+    public static final String PASS_COUNT_STATEWISE_CATEGORY = "select count(*) as pass_count,usr.state from  quiz_user qu inner join User usr on usr.id=qu.user_id where qu.result='PASS' and qu.quiz_category_id=:categoryId  group by usr.state";
 
-    public static final String FAIL_COUNT_STATEWISE_TOPIC = "select count(*) as pass_count,usr.state from  quiz_user qu inner join User usr on usr.id=qu.user_id where qu.result='FAIL' and qu.quiz_topic_id=:topicId  group by usr.state";
+    public static final String FAIL_COUNT_STATEWISE_CATEGORY = "select count(*) as pass_count,usr.state from  quiz_user qu inner join User usr on usr.id=qu.user_id where qu.result='FAIL' and qu.quiz_category_id=:categoryId  group by usr.state";
 
     public static final String STATE_PASS_COUNT_BY_QUIZ = "select count(*) as pass_count,usr.state from  quiz_user qu inner join User usr on usr.id=qu.user_id where qu.result='PASS' and qu.quiz_id=:quizId  group by usr.state";
 
@@ -27,7 +27,7 @@ public interface QuizQueryConstant {
 
     public static final String CITYWISE_PASS_COUNT =  " select count(*) as pass_count,usr.city from  quiz_user qu  inner join User usr on usr.id=qu.user_id where qu.result='PASS' and usr.state=:state group by usr.city";
 
-    public static final String GET_QUIZ_TOPIC ="select distinct(q.quiz_title) , qu.quiz_id FROM quizmaker.quiz_user qu inner join quiz q on q.quiz_index=qu.quiz_id where qu.quiz_topic_id=:topicId";
+    public static final String GET_QUIZ_CATEGORY ="select distinct(q.quiz_title) , qu.quiz_id FROM quizmaker.quiz_user qu inner join quiz q on q.quiz_index=qu.quiz_id where qu.quiz_category_id=:categoryId";
 
     public static final String GET_QUIZ_USER_ROLE ="select usr.id from user usr inner join user_role ur on usr.id = ur.user_id where usr.city IN(:states) and ur.role_id IN(:roleids) ";
 
